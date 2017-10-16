@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 16:51:32 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/13 15:54:29 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/15 14:49:01 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ int		init_board(t_vect **board, int fd, t_vars *vars)
 		j = 0;
 		while (split[j])
 		{
-			board[i][j].x = j * CELL_SIZE - X_OFFSET / 2;
-			board[i][j].y = i * CELL_SIZE - Y_OFFSET / 2;
-			board[i][j].z = ft_atoi(split[j]) * 2;
+			board[i][j].x = j * CELL_SIZE - len / 2 * CELL_SIZE;
+			board[i][j].y = i * CELL_SIZE - len / 4 * CELL_SIZE;
+			board[i][j].z = ft_atoi(split[j]) * Z_SCALAR;
+			board[i][j].h = ft_atoi(split[j]);
 			free(split[j]);
 			j++;
 		}

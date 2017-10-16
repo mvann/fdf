@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:56:42 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/13 17:39:39 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/15 14:43:06 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,12 @@
 
 # define WIN_SIZE_X 800
 # define WIN_SIZE_Y WIN_SIZE_X
-# define CELL_SIZE 30
+# define CELL_SIZE 40
 # define X_OFFSET WIN_SIZE_X / 2
 # define Y_OFFSET X_OFFSET
 # define THETA .05
 # define SHIFT_AMOUNT 5
+# define Z_SCALAR 3;
 
 # define BACKGROUND_COLOR 0x000000
 # define WIRE_COLOR 0xFFFFFF
@@ -48,11 +49,18 @@
 # define KEY_Z 6
 # define KEY_X 7
 
+typedef struct	s_color
+{
+	int			h;
+	int			col;
+}				t_color;
+
 typedef struct	s_vect
 {
 	double	x;
 	double	y;
 	double	z;
+	int		h;
 }				t_vect;
 
 typedef struct	s_grad
@@ -80,12 +88,14 @@ typedef struct	s_vars
 	void	*mlx;
 	void	*win;
 	t_vect	**board;
+	int		x_offset;
+	int		y_offset;
 	int		len;
 	t_held	*held;
 }				t_vars;
 
 int		init_board(t_vect **board, int fd, t_vars *vars);
-void	draw_board(t_vect **board, t_vars *vars, int color);
+void	draw_board(t_vect **board, t_vars *vars);
 void	axis_rot(t_vars *vars, double theta, char c);
 void	shift(t_vars *vars, int sx, int sy);
 void	move_vects(t_vars *vars);

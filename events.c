@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 16:30:30 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/13 13:40:24 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/15 13:11:13 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		keydown_event(int keycode, t_vars *vars)
 {
 	t_held *keys;
 
-	printf("down:%d\n", keycode);
+	// printf("down:%d\n", keycode);
 	keys = vars->held;
 	if (keycode == KEY_Q)
 		keys->q = 1;
@@ -48,7 +48,7 @@ int		keyup_event(int keycode, t_vars *vars)
 {
 	t_held *keys;
 
-	printf("up:%d\n", keycode);
+	// printf("up:%d\n", keycode);
 	keys = vars->held;
 	if (keycode == KEY_Q)
 		keys->q = 0;
@@ -91,7 +91,7 @@ int		loop_event(t_vars *vars)
 	// printf("here2\n");
 	move_vects(vars);
 	// printf("here3\n");
-	draw_board(vars->board, vars, WIRE_COLOR);
+	draw_board(vars->board, vars);
 	// printf("here4\n");
 	return(0);
 }

@@ -6,37 +6,70 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 18:39:55 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/13 17:40:13 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/15 15:07:28 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdio.h> //DELETE THIS
 
-// int		get_gradient(int n1, int range, t_gradient grad)
-// {
-//
-// };
-
-void	line_to(t_vars *vars, double x0, double y0, double x1, double y1, t_gradient grad)
+int		get_mid(int mid, int start, int fin, int sh, int fh)
 {
-	int dx = (int)x1 - (int)x0;
-	int dy = (int)y1 - (int)y0;
+	if (fin == start)
+		return (fh);
+	return (((fh - sh) * (mid - start)) / (fin - start) + sh);
+}
+
+int		get_color(int mid, int start, int fin, int sh, int fh)
+{
+	int		h;
+	t_color	colors[3];
+	int		num_colors;
+	int		rgb;
+	int		i;
+
+	num_colors = 3;
+	if ((h = get_mid(mid, start, fin, sh, fh)) < 0)
+		return (0x4983FF);
+	colors[0].h = 0;
+	colors[0].col = 0x7EFF77;
+	colors[1].h = 7;
+	colors[1].col = 0x7F560F;
+	colors[2].h = 10;
+	colors[2].col = 0xFFFFFF;
+	i = 0;
+	while (i + 1 < num_colors && colors[i + 1].h <= h)
+		i++;
+	if (i == num_colors - 1)
+		return (colors[num_colors - 1].col);
+	rgb = 0;
+	rgb |= get_mid(h, colors[i].h, colors[i + 1].h,
+		colors[i].col & 0xFF0000, colors[i + 1].col & 0xFF0000) & 0xFF0000;
+	rgb |= get_mid(h, colors[i].h, colors[i + 1].h,
+		colors[i].col & 0x00FF00, colors[i + 1].col & 0x00FF00) & 0x00FF00;
+	return (rgb |= get_mid(h, colors[i].h, colors[i + 1].h,
+		colors[i].col & 0x0000FF, colors[i + 1].col & 0x0000FF) & 0x0000FF);
+}
+
+void	line_to(t_vars *vars, t_vect old, t_vect new)
+{
+	int dx = (int)new.x - (int)old.x;
+	int dy = (int)new.y - (int)old.y;
 	int delta = abs(dx) > abs(dy) ? 2 * abs(dy) - abs(dx) : 2 * abs(dx) - abs(dy);
 	int x;
 	int y;
-	int diff;
 // vars->len+=color;
 // vars->len-=color;
-	y = (int)y0;
-	x = (int)x0;
-	// printf("<---:x:%i, x0:%f, x1:%f, y:%i, y0:%f, y1:%f, dx:%i, dy:%i, d:%i\n",
-	// x,x0,x1,y,y0,y1,dx,dy,delta);
+	y = (int)old.y;
+	x = (int)old.x;
+	// printf("<---:x:%i, old.x:%f, new.x:%f, y:%i, old.y:%f, new.y:%f, dx:%i, dy:%i, d:%i\n",
+	// x,old.x,new.x,y,old.y,new.y,dx,dy,delta);
 	if (abs(dx) > abs(dy))
 	{
-		while (x != (int)x1)
+		while (x != (int)new.x)
 		{
-			mlx_pixel_put(vars->mlx, vars->win, x + X_OFFSET, y + Y_OFFSET, get_gradient(x - (int)x0, (int)x1 - (int)x1, grad);
+			mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset, y + vars->y_offset,
+				get_color(x, old.x, new.x, old.h, new.h));
 			if (delta > 0)
 			{
 				y += dy > 0 ? 1 : -1;
@@ -48,9 +81,10 @@ void	line_to(t_vars *vars, double x0, double y0, double x1, double y1, t_gradien
 	}
 	else
 	{
-		while (y != (int)y1)
+		while (y != (int)new.y)
 		{
-			mlx_pixel_put(vars->mlx, vars->win, x + X_OFFSET, y + Y_OFFSET, color);
+			mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset, y + vars->y_offset,
+				get_color(y, old.y, new.y, old.h, new.h));
 			if (delta > 0)
 			{
 				x += dx > 0 ? 1 : -1;
@@ -60,43 +94,42 @@ void	line_to(t_vars *vars, double x0, double y0, double x1, double y1, t_gradien
 			y += dy > 0 ? 1 : -1;
 		}
 	}
-	// printf("--->:x:%i, x0:%f, x1:%f, y:%i, y0:%f, y1:%f, dx:%i, dy:%i, d:%i\n",
-	// x,x0,x1,y,y0,y1,dx,dy,delta);
+	// printf("--->:x:%i, old.x:%f, new.x:%f, y:%i, old.y:%f, new.y:%f, dx:%i, dy:%i, d:%i\n",
+	// x,old.x,new.x,y,old.y,new.y,dx,dy,delta);
 }
 
-void	draw_board(t_vect **board, t_vars *vars, int color)
+void	draw_board(t_vect **board, t_vars *vars)
 {
 	int row;
 	int col;
-	t_grad	grad;
-
-	grad.start = 0xffffff;
-	grad.finish = 0xff00ff;
-
-	// color++;
+	int next_col;
+	int next_row;
 
 	row = 0;
 	while (board[row])
 	{
 		col = 0;
-		while (col + 1 < vars->len)
+		while (col < vars->len)
 		{
-			line_to(vars, board[row][col].x, board[row][col].y,
-				board[row][col + 1].x, board[row][col + 1].y, grad);
+			if ((next_col = col + 1 < vars->len))
+				line_to(vars, board[row][col], board[row][col + 1]);
+			if ((next_row = board[row + 1] != 0))
+				line_to(vars, board[row][col], board[row + 1][col]);
+			if (next_col && next_row)
+				line_to(vars, board[row][col], board[row + 1][col + 1]);
 			col++;
 		}
 		row++;
 	}
-	col = 0;
-	while (col < vars->len)
-	{
-		row = 0;
-		while (board[row + 1])
-		{
-			line_to(vars, board[row][col].x, board[row][col].y,
-				board[row + 1][col].x, board[row + 1][col].y, grad);
-			row++;
-		}
-		col++;
-	}
+	// col = 0;
+	// while (col < vars->len)
+	// {
+	// 	row = 0;
+	// 	while (board[row + 1])
+	// 	{
+	// 		line_to(vars, board[row][col], board[row + 1][col]);
+	// 		row++;
+	// 	}
+	// 	col++;
+	// }
 }
