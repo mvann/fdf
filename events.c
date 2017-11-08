@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 16:30:30 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/15 13:11:13 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/16 15:50:58 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int		keydown_event(int keycode, t_vars *vars)
 		keys->left = 1;
 	if (keycode == KEY_RIGHT)
 		keys->right = 1;
+	if (keycode == KEY_T)
+		keys->t = 1;
 	if (keycode == KEY_ESC)
 		exit(EXIT_SUCCESS);
 	return (0);
@@ -70,6 +72,8 @@ int		keyup_event(int keycode, t_vars *vars)
 		keys->left = 0;
 	if (keycode == KEY_RIGHT)
 		keys->right = 0;
+	if (keycode == KEY_T)
+		keys->t = 0;
 	// if (keycode == KEY_ESC)
 	// 	exit(EXIT_SUCCESS);
 	return (0);

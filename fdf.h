@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:56:42 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/15 14:43:06 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/16 15:50:11 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define KEY_S 1
 # define KEY_Z 6
 # define KEY_X 7
+# define KEY_T 17
 
 typedef struct	s_color
 {
@@ -81,6 +82,7 @@ typedef struct	s_held
 	int		s;
 	int		z;
 	int		x;
+	int		t;
 }				t_held;
 
 typedef struct	s_vars

@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 18:39:55 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/15 15:07:28 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/16 15:51:22 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,26 @@ int		get_mid(int mid, int start, int fin, int sh, int fh)
 	if (fin == start)
 		return (fh);
 	return (((fh - sh) * (mid - start)) / (fin - start) + sh);
+}
+
+int		get_octant(int dx, int dy)
+{
+	if (dx >= dy && dx >= 0 && dy >= 0)
+		return (0);
+	else if (dy >= dx && dx >= 0 && dy >= 0)
+		return (1);
+	else if (dy >= dx && dx <= 0 && dy >= 0)
+		return (2);
+	else if (dx >= dy && dx <= 0 && dy >= 0)
+		return (3);
+	else if (dx >= dy && dx <= 0 && dy <= 0)
+		return (4);
+	else if (dy >= dx && dx <= 0 && dy <= 0)
+		return (5);
+	else if (dy >= dx && dx >= 0 && dy <= 0)
+		return (6);
+	else
+		return (7);
 }
 
 int		get_color(int mid, int start, int fin, int sh, int fh)
@@ -115,7 +135,7 @@ void	draw_board(t_vect **board, t_vars *vars)
 				line_to(vars, board[row][col], board[row][col + 1]);
 			if ((next_row = board[row + 1] != 0))
 				line_to(vars, board[row][col], board[row + 1][col]);
-			if (next_col && next_row)
+			if (next_col && next_row && vars->held->t)
 				line_to(vars, board[row][col], board[row + 1][col + 1]);
 			col++;
 		}
