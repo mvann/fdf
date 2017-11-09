@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 16:51:32 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/15 14:49:01 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/08 18:45:13 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,27 @@ static int	get_split_len(char **split)
 	return (i);
 }
 
-int		init_board(t_vect **board, int fd, t_vars *vars)
+static void	handle_split(char **split, t_vect **board, int len, int i)
+{
+	int	j;
+
+	j = 0;
+	while (split[j])
+	{
+		board[i][j].x = j * CELL_SIZE - len / 2 * CELL_SIZE;
+		board[i][j].y = i * CELL_SIZE - len / 4 * CELL_SIZE;
+		board[i][j].z = ft_atoi(split[j]) * Z_SCALAR;
+		board[i][j].h = ft_atoi(split[j]);
+		free(split[j]);
+		j++;
+	}
+}
+
+int			init_board(t_vect **board, int fd, t_vars *vars)
 {
 	char	*str;
 	char	**split;
 	int		i;
-	int		j;
 	int		len;
 
 	len = 0;
@@ -40,16 +55,7 @@ int		init_board(t_vect **board, int fd, t_vars *vars)
 		if (len && len != get_split_len(split))
 			return (0);
 		board[i] = (t_vect *)malloc(sizeof(t_vect) * len);
-		j = 0;
-		while (split[j])
-		{
-			board[i][j].x = j * CELL_SIZE - len / 2 * CELL_SIZE;
-			board[i][j].y = i * CELL_SIZE - len / 4 * CELL_SIZE;
-			board[i][j].z = ft_atoi(split[j]) * Z_SCALAR;
-			board[i][j].h = ft_atoi(split[j]);
-			free(split[j]);
-			j++;
-		}
+		handle_split(split, board, len, i);
 		free(split);
 		i++;
 	}

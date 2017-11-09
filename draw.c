@@ -6,19 +6,11 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 18:39:55 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/16 15:51:22 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/08 20:01:21 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdio.h> //DELETE THIS
-
-int		get_mid(int mid, int start, int fin, int sh, int fh)
-{
-	if (fin == start)
-		return (fh);
-	return (((fh - sh) * (mid - start)) / (fin - start) + sh);
-}
 
 int		get_octant(int dx, int dy)
 {
@@ -40,91 +32,87 @@ int		get_octant(int dx, int dy)
 		return (7);
 }
 
-int		get_color(int mid, int start, int fin, int sh, int fh)
+void	line_to1(t_vars *vars, t_vect old, t_vect new, t_heights vessel)
 {
-	int		h;
-	t_color	colors[3];
-	int		num_colors;
-	int		rgb;
-	int		i;
-
-	num_colors = 3;
-	if ((h = get_mid(mid, start, fin, sh, fh)) < 0)
-		return (0x4983FF);
-	colors[0].h = 0;
-	colors[0].col = 0x7EFF77;
-	colors[1].h = 7;
-	colors[1].col = 0x7F560F;
-	colors[2].h = 10;
-	colors[2].col = 0xFFFFFF;
-	i = 0;
-	while (i + 1 < num_colors && colors[i + 1].h <= h)
-		i++;
-	if (i == num_colors - 1)
-		return (colors[num_colors - 1].col);
-	rgb = 0;
-	rgb |= get_mid(h, colors[i].h, colors[i + 1].h,
-		colors[i].col & 0xFF0000, colors[i + 1].col & 0xFF0000) & 0xFF0000;
-	rgb |= get_mid(h, colors[i].h, colors[i + 1].h,
-		colors[i].col & 0x00FF00, colors[i + 1].col & 0x00FF00) & 0x00FF00;
-	return (rgb |= get_mid(h, colors[i].h, colors[i + 1].h,
-		colors[i].col & 0x0000FF, colors[i + 1].col & 0x0000FF) & 0x0000FF);
-}
-
-void	line_to(t_vars *vars, t_vect old, t_vect new)
-{
-	int dx = (int)new.x - (int)old.x;
-	int dy = (int)new.y - (int)old.y;
-	int delta = abs(dx) > abs(dy) ? 2 * abs(dy) - abs(dx) : 2 * abs(dx) - abs(dy);
+	int dx;
+	int dy;
+	int delta;
 	int x;
 	int y;
-// vars->len+=color;
-// vars->len-=color;
+
+	dx = (int)new.x - (int)old.x;
+	dy = (int)new.y - (int)old.y;
+	delta = abs(dx) > abs(dy) ? 2 * abs(dy) - abs(dx) : 2 * abs(dx) - abs(dy);
 	y = (int)old.y;
 	x = (int)old.x;
-	// printf("<---:x:%i, old.x:%f, new.x:%f, y:%i, old.y:%f, new.y:%f, dx:%i, dy:%i, d:%i\n",
-	// x,old.x,new.x,y,old.y,new.y,dx,dy,delta);
-	if (abs(dx) > abs(dy))
+	vessel.oldh = old.h;
+	vessel.newh = new.h;
+	while (x != (int)new.x)
 	{
-		while (x != (int)new.x)
+		mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset,
+			y + vars->y_offset, get_color(x, old.x, new.x, vessel));
+		if (delta > 0)
 		{
-			mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset, y + vars->y_offset,
-				get_color(x, old.x, new.x, old.h, new.h));
-			if (delta > 0)
-			{
-				y += dy > 0 ? 1 : -1;
-				delta += (-1) * 2 * (abs(dx) > abs(dy) ? abs(dx) : abs(dy));//(dx > 0 ? dx : -dx);
-			}
-			delta += 2 * (abs(dx) > abs(dy) ? abs(dy) : abs(dx));
-			x += dx > 0 ? 1 : -1;
-		}
-	}
-	else
-	{
-		while (y != (int)new.y)
-		{
-			mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset, y + vars->y_offset,
-				get_color(y, old.y, new.y, old.h, new.h));
-			if (delta > 0)
-			{
-				x += dx > 0 ? 1 : -1;
-				delta += (-1) * 2 * abs(dy);//(dx > 0 ? dx : -dx);
-			}
-			delta += 2 * (abs(dx) > abs(dy) ? abs(dy) : abs(dx));
 			y += dy > 0 ? 1 : -1;
+			delta += (-1) * 2 * (abs(dx) > abs(dy) ? abs(dx) : abs(dy));
 		}
+		delta += 2 * (abs(dx) > abs(dy) ? abs(dy) : abs(dx));
+		x += dx > 0 ? 1 : -1;
 	}
-	// printf("--->:x:%i, old.x:%f, new.x:%f, y:%i, old.y:%f, new.y:%f, dx:%i, dy:%i, d:%i\n",
-	// x,old.x,new.x,y,old.y,new.y,dx,dy,delta);
+}
+
+void	line_to2(t_vars *vars, t_vect old, t_vect new, t_heights vessel)
+{
+	int dx;
+	int dy;
+	int delta;
+	int x;
+	int y;
+
+	dx = (int)new.x - (int)old.x;
+	dy = (int)new.y - (int)old.y;
+	delta = abs(dx) > abs(dy) ? 2 * abs(dy) - abs(dx) : 2 * abs(dx) - abs(dy);
+	y = (int)old.y;
+	x = (int)old.x;
+	vessel.oldh = old.h;
+	vessel.newh = new.h;
+	while (y != (int)new.y)
+	{
+		mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset,
+			y + vars->y_offset, get_color(y, old.y, new.y, vessel));
+		if (delta > 0)
+		{
+			x += dx > 0 ? 1 : -1;
+			delta += (-1) * 2 * abs(dy);
+		}
+		delta += 2 * (abs(dx) > abs(dy) ? abs(dy) : abs(dx));
+		y += dy > 0 ? 1 : -1;
+	}
+}
+
+void	line_to(t_vars *vars, t_vect old, t_vect new, t_heights vessel)
+{
+	int dx;
+	int dy;
+
+	dx = (int)new.x - (int)old.x;
+	dy = (int)new.y - (int)old.y;
+	if (abs(dx) > abs(dy))
+		line_to1(vars, old, new, vessel);
+	else
+		line_to2(vars, old, new, vessel);
 }
 
 void	draw_board(t_vect **board, t_vars *vars)
 {
-	int row;
-	int col;
-	int next_col;
-	int next_row;
+	int			row;
+	int			col;
+	int			next_col;
+	int			next_row;
+	t_heights	vessel;
 
+	vessel.oldh = 0;
+	vessel.newh = 0;
 	row = 0;
 	while (board[row])
 	{
@@ -132,24 +120,13 @@ void	draw_board(t_vect **board, t_vars *vars)
 		while (col < vars->len)
 		{
 			if ((next_col = col + 1 < vars->len))
-				line_to(vars, board[row][col], board[row][col + 1]);
+				line_to(vars, board[row][col], board[row][col + 1], vessel);
 			if ((next_row = board[row + 1] != 0))
-				line_to(vars, board[row][col], board[row + 1][col]);
+				line_to(vars, board[row][col], board[row + 1][col], vessel);
 			if (next_col && next_row && vars->held->t)
-				line_to(vars, board[row][col], board[row + 1][col + 1]);
+				line_to(vars, board[row][col], board[row + 1][col + 1], vessel);
 			col++;
 		}
 		row++;
 	}
-	// col = 0;
-	// while (col < vars->len)
-	// {
-	// 	row = 0;
-	// 	while (board[row + 1])
-	// 	{
-	// 		line_to(vars, board[row][col], board[row + 1][col]);
-	// 		row++;
-	// 	}
-	// 	col++;
-	// }
 }

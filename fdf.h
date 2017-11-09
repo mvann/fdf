@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:56:42 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/16 15:50:11 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/08 20:17:44 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define Y_OFFSET X_OFFSET
 # define THETA .05
 # define SHIFT_AMOUNT 5
-# define Z_SCALAR 3;
+# define Z_SCALAR 3
 
 # define BACKGROUND_COLOR 0x000000
 # define WIRE_COLOR 0xFFFFFF
@@ -49,6 +49,12 @@
 # define KEY_Z 6
 # define KEY_X 7
 # define KEY_T 17
+
+typedef struct	s_heights
+{
+	int			oldh;
+	int			newh;
+}				t_heights;
 
 typedef struct	s_color
 {
@@ -105,7 +111,9 @@ int		keydown_event(int keycode, t_vars *vars);
 int		keyup_event(int keycode, t_vars *vars);
 int		expose_event(t_vars *vars);
 int		loop_event(t_vars *vars);
-
-
+int		print_error();
+int		get_color(int mid, int start, int fin, t_heights vessel);
+int		keydown_event(int keycode, t_vars *vars);
+int		keyup_event(int keycode, t_vars *vars);
 
 #endif

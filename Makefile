@@ -6,7 +6,7 @@
 #    By: mvann <mvann@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/09/18 12:17:58 by mvann             #+#    #+#              #
-#    Updated: 2017/10/12 16:44:01 by mvann            ###   ########.fr        #
+#    Updated: 2017/11/08 20:23:15 by mvann            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ parse.c\
 draw.c\
 calculations.c\
 events.c\
-controller.c
+keyevents.c\
+controller.c\
+color.c
 
 all: $(NAME)
 
