@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 16:51:32 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/09 16:38:20 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 17:42:32 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,34 @@ static int	get_split_len(char **split)
 	return (i);
 }
 
-static void	check_alpha(char *s)
+static void	check_valid_char(char *s)
 {
-	while (*s)
+	int i;
+
+	i = 0;
+	while (s[i])
 	{
-		if (ft_isalpha(*s))
+		if (!(ft_isdigit(s[i]) || s[i] == '-' || s[i] == '+')
+		|| (i > 0 && s[i] == '-') || (i > 0 && s[i] == '+'))
 			print_error("unexpected character in map");
-		s++;
+		i++;
 	}
 }
 
 static void	handle_split(char **split, t_vect **board, int len, int i)
 {
 	int	j;
+	int cell_size;
+	int lesser;
 
+	lesser = WIN_SIZE_X > WIN_SIZE_Y ? WIN_SIZE_Y : WIN_SIZE_X;
+	cell_size = len ? (lesser - 50) / len : CELL_SIZE;
 	j = 0;
 	while (split[j])
 	{
-		check_alpha(split[j]);
-		board[i][j].x = j * CELL_SIZE - len / 2 * CELL_SIZE;
-		board[i][j].y = i * CELL_SIZE - len / 4 * CELL_SIZE;
+		check_valid_char(split[j]);
+		board[i][j].x = j * cell_size - len / 2 * cell_size;
+		board[i][j].y = i * cell_size - len / 4 * cell_size;
 		board[i][j].z = ft_atoi(split[j]) * Z_SCALAR;
 		board[i][j].h = ft_atoi(split[j]);
 		free(split[j]);

@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:56:42 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/09 16:35:48 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 17:23:43 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@
 
 # define WIN_SIZE_X 800
 # define WIN_SIZE_Y WIN_SIZE_X
-# define CELL_SIZE 40
+# define CELL_SIZE 20
 # define X_OFFSET WIN_SIZE_X / 2
 # define Y_OFFSET X_OFFSET
 # define THETA .05
 # define SHIFT_AMOUNT 5
-# define Z_SCALAR 3
+# define Z_SCALAR 6
 
 # define BACKGROUND_COLOR 0x000000
 # define WIRE_COLOR 0xFFFFFF

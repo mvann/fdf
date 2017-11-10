@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:55:58 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/09 16:38:25 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 17:28:34 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		main(int argc, char **argv)
 	argc--;
 	argv++;
 	if (argc != 1)
-		return (0);
+		return (print_error("missing file path"));
 	if ((fd = open(argv[0], O_RDONLY)) < 0)
 		return (print_error("bad file"));
 	if (!(ret = init_vars(&vars, fd)))
