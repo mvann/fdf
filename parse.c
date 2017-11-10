@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 16:51:32 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/08 18:45:13 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 16:38:20 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@ static int	get_split_len(char **split)
 	return (i);
 }
 
+static void	check_alpha(char *s)
+{
+	while (*s)
+	{
+		if (ft_isalpha(*s))
+			print_error("unexpected character in map");
+		s++;
+	}
+}
+
 static void	handle_split(char **split, t_vect **board, int len, int i)
 {
 	int	j;
@@ -29,6 +39,7 @@ static void	handle_split(char **split, t_vect **board, int len, int i)
 	j = 0;
 	while (split[j])
 	{
+		check_alpha(split[j]);
 		board[i][j].x = j * CELL_SIZE - len / 2 * CELL_SIZE;
 		board[i][j].y = i * CELL_SIZE - len / 4 * CELL_SIZE;
 		board[i][j].z = ft_atoi(split[j]) * Z_SCALAR;

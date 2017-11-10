@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 19:56:21 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/08 20:15:17 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 13:56:47 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ void	axis_rot(t_vars *vars, double theta, char c)
 
 void	shift(t_vars *vars, int sx, int sy)
 {
-	vars->x_offset += SHIFT_AMOUNT * sx;
-	vars->y_offset += SHIFT_AMOUNT * sy;
+	vars->x_off += SHIFT_AMOUNT * sx;
+	vars->y_off += SHIFT_AMOUNT * sy;
 }

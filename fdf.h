@@ -6,14 +6,12 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:56:42 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/08 20:17:44 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 16:35:48 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
-
-/*DELTE ME*/ #include <stdio.h> //DELETE ME
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -49,6 +47,7 @@
 # define KEY_Z 6
 # define KEY_X 7
 # define KEY_T 17
+# define KEY_Y 16
 
 typedef struct	s_heights
 {
@@ -64,56 +63,57 @@ typedef struct	s_color
 
 typedef struct	s_vect
 {
-	double	x;
-	double	y;
-	double	z;
-	int		h;
+	double		x;
+	double		y;
+	double		z;
+	int			h;
 }				t_vect;
 
 typedef struct	s_grad
 {
-	int		start;
-	int		finish;
+	int			start;
+	int			finish;
 }				t_grad;
 
 typedef struct	s_held
 {
-	int		up;
-	int		down;
-	int		left;
-	int		right;
-	int		q;
-	int		w;
-	int		a;
-	int		s;
-	int		z;
-	int		x;
-	int		t;
+	int			up;
+	int			down;
+	int			left;
+	int			right;
+	int			q;
+	int			w;
+	int			a;
+	int			s;
+	int			z;
+	int			x;
+	int			t;
 }				t_held;
 
 typedef struct	s_vars
 {
-	void	*mlx;
-	void	*win;
-	t_vect	**board;
-	int		x_offset;
-	int		y_offset;
-	int		len;
-	t_held	*held;
+	void		*mlx;
+	void		*win;
+	t_vect		**board;
+	int			x_off;
+	int			y_off;
+	int			len;
+	int			gradient;
+	t_held		*held;
 }				t_vars;
 
-int		init_board(t_vect **board, int fd, t_vars *vars);
-void	draw_board(t_vect **board, t_vars *vars);
-void	axis_rot(t_vars *vars, double theta, char c);
-void	shift(t_vars *vars, int sx, int sy);
-void	move_vects(t_vars *vars);
-int		keydown_event(int keycode, t_vars *vars);
-int		keyup_event(int keycode, t_vars *vars);
-int		expose_event(t_vars *vars);
-int		loop_event(t_vars *vars);
-int		print_error();
-int		get_color(int mid, int start, int fin, t_heights vessel);
-int		keydown_event(int keycode, t_vars *vars);
-int		keyup_event(int keycode, t_vars *vars);
+int				init_board(t_vect **board, int fd, t_vars *vars);
+void			draw_board(t_vect **board, t_vars *vars);
+void			axis_rot(t_vars *vars, double theta, char c);
+void			shift(t_vars *vars, int sx, int sy);
+void			move_vects(t_vars *vars);
+int				keydown_event(int keycode, t_vars *vars);
+int				keyup_event(int keycode, t_vars *vars);
+int				expose_event(t_vars *vars);
+int				loop_event(t_vars *vars);
+int				print_error(char *s);
+int				get_color(int mid, int start, int fin, t_heights vessel);
+int				keydown_event(int keycode, t_vars *vars);
+int				keyup_event(int keycode, t_vars *vars);
 
 #endif

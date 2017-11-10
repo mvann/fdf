@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 18:39:55 by mvann             #+#    #+#             */
-/*   Updated: 2017/11/08 20:01:21 by mvann            ###   ########.fr       */
+/*   Updated: 2017/11/09 13:58:35 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	line_to1(t_vars *vars, t_vect old, t_vect new, t_heights vessel)
 	vessel.newh = new.h;
 	while (x != (int)new.x)
 	{
-		mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset,
-			y + vars->y_offset, get_color(x, old.x, new.x, vessel));
+		mlx_pixel_put(vars->mlx, vars->win, x + vars->x_off, y + vars->y_off,
+			vars->gradient ? get_color(x, old.x, new.x, vessel) : WIRE_COLOR);
 		if (delta > 0)
 		{
 			y += dy > 0 ? 1 : -1;
@@ -78,8 +78,8 @@ void	line_to2(t_vars *vars, t_vect old, t_vect new, t_heights vessel)
 	vessel.newh = new.h;
 	while (y != (int)new.y)
 	{
-		mlx_pixel_put(vars->mlx, vars->win, x + vars->x_offset,
-			y + vars->y_offset, get_color(y, old.y, new.y, vessel));
+		mlx_pixel_put(vars->mlx, vars->win, x + vars->x_off, y + vars->y_off,
+			vars->gradient ? get_color(y, old.y, new.y, vessel) : WIRE_COLOR);
 		if (delta > 0)
 		{
 			x += dx > 0 ? 1 : -1;
